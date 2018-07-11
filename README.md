@@ -8,3 +8,13 @@ Creates an image from a phone portrait mode image. Includes the following featur
 
 Made with Go.
 
+## Example
+
+**INPUT IMAGE**
+
+![Input Image](testdata/Screenshot_20180124-103452.png)
+
+**OUTPUT IMAGE**
+
+![Output Image](testdata/out.jpg)
+
