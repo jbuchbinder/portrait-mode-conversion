@@ -12,7 +12,7 @@ import (
 var (
 	backgroundBlurFactor  = flag.Uint("bg-blur-factor", 35, "Background blur factor")
 	backgroundGammaFactor = flag.Float64("bg-gamma-factor", 0.9, "Background gamma factor")
-	in                    = flag.String("in", "", "Input impage name")
+	in                    = flag.String("in", "", "Input image name")
 	lowerCropBegin        = flag.Uint("lower-crop-begin-compare", 2, "Number of pixels to skip before comparison starts")
 	lowerCropHorizOffset  = flag.Uint("lower-crop-horizontal-offset", 10, "Offset from the left to compare for lower crop")
 	lowerCropRgb          = flag.Uint("lower-crop-rgb", 61680, "R/G/B value 0...65535 to crop from the bottom")
