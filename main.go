@@ -20,6 +20,9 @@ var (
 	out                   = flag.String("out", "", "Output impage name")
 	targetHeight          = flag.Uint("target-height", 1080, "Target height")
 	targetWidth           = flag.Uint("target-width", 1920, "Target width")
+	upperCropBegin        = flag.Uint("upper-crop-begin-compare", 2, "Number of pixels to skip before comparison starts")
+	upperCropHorizOffset  = flag.Uint("upper-crop-horizontal-offset", 10, "Offset from the left to compare for upper crop")
+	upperCropRgb          = flag.Uint("upper-crop-rgb", 0, "R/G/B value 0...65535 to crop from the top")
 )
 
 func main() {
@@ -51,7 +54,7 @@ func main() {
 		log.Printf("Difference was %d, resetting to bottom", int(bottom)-(src.Bounds().Max.Y))
 		bottom = uint(src.Bounds().Max.Y)
 	}
-	if bottom != uint(src.Bounds().Max.Y-10) {
+	if bottom != uint(src.Bounds().Max.Y) {
 		log.Printf("Current bounds: %d, %d", src.Bounds().Max.X, src.Bounds().Max.Y)
 		log.Printf("Resize detected; clipping bottom to %d", bottom)
 		//src = imaging.Crop(src, image.Rect(0, src.Bounds().Max.X, 0, bottom))
