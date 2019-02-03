@@ -17,7 +17,8 @@ var (
 	lowerCropHorizOffset  = flag.Uint("lower-crop-horizontal-offset", 10, "Offset from the left to compare for lower crop")
 	lowerCropRgb          = flag.Uint("lower-crop-rgb", 61680, "R/G/B value 0...65535 to crop from the bottom")
 	maxLowerResize        = flag.Uint("max-lower-resize", 200, "Maximum number of rows to crop from bottom")
-	out                   = flag.String("out", "", "Output impage name")
+	maxUpperResize        = flag.Uint("max-upper-resize", 200, "Maximum number of rows to crop from top")
+	out                   = flag.String("out", "", "Output image name")
 	targetHeight          = flag.Uint("target-height", 1080, "Target height")
 	targetWidth           = flag.Uint("target-width", 1920, "Target width")
 	upperCropBegin        = flag.Uint("upper-crop-begin-compare", 2, "Number of pixels to skip before comparison starts")
@@ -50,6 +51,17 @@ func main() {
 		}
 	}
 	log.Printf("Calculated bottom px at %d", bottom)
+
+	// Shave off top, if it exists
+	top := uint(0)
+	for i := top + *upperCropBegin; i <= (*maxUpperResize * 2); i++ {
+		r, g, b, _ := src.At(int(*upperCropHorizOffset), int(i)).RGBA()
+		if r != uint32(*upperCropRgb) || g != uint32(*upperCropRgb) || b != uint32(*upperCropRgb) {
+			break
+		}
+		top = i
+	}
+
 	if int(bottom)-src.Bounds().Max.Y > int(*maxLowerResize) {
 		log.Printf("Difference was %d, resetting to bottom", int(bottom)-(src.Bounds().Max.Y))
 		bottom = uint(src.Bounds().Max.Y)
