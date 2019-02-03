@@ -2,24 +2,28 @@
 
 
 [[projects]]
+  digest = "1:47cebe27e59e4e0c239d0bf2419d6a46f0364a56efc43be702c32b82710b6ecf"
   name = "github.com/disintegration/imaging"
   packages = ["."]
-  revision = "bbcee2f5c9d5e94ca42c8b50ec847fec64a6c134"
-  version = "v1.4.2"
+  pruneopts = "UT"
+  revision = "5362c131d56305ce787e79a5b94ffc956df00d62"
+  version = "v1.6.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:acadbbf02e5c744709c60ac929e63258a69a3404ab36ed0c1a245cc28f056220"
   name = "golang.org/x/image"
   packages = [
     "bmp",
     "tiff",
-    "tiff/lzw"
+    "tiff/lzw",
   ]
-  revision = "c73c2afc3b812cdd6385de5a50616511c4a3d458"
+  pruneopts = "UT"
+  revision = "183bebdce1b249c42a7cf6772817e8c2e873b966"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ce9b81d3dec3db87f7a9da361102e6a669765423fdb7eecd7df012aca1c044eb"
+  input-imports = ["github.com/disintegration/imaging"]
   solver-name = "gps-cdcl"
   solver-version = 1
