@@ -1,2 +1,4 @@
 portrait-mode-conversion
+*.exe
+go.sum
 *~
