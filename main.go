@@ -15,7 +15,7 @@ var (
 	in                    = flag.String("in", "", "Input image name")
 	lowerCropBegin        = flag.Uint("lower-crop-begin-compare", 2, "Number of pixels to skip before comparison starts")
 	lowerCropHorizOffset  = flag.Uint("lower-crop-horizontal-offset", 10, "Offset from the left to compare for lower crop")
-	lowerCropRgb          = flag.Uint("lower-crop-rgb", 61680, "R/G/B value 0...65535 to crop from the bottom")
+	lowerCropRgb          = flag.Uint("lower-crop-rgb", 61680, "R/G/B value 0...65535 to crop from the bottom (61680 is default for Android)")
 	maxLowerResize        = flag.Uint("max-lower-resize", 200, "Maximum number of rows to crop from bottom")
 	maxUpperResize        = flag.Uint("max-upper-resize", 200, "Maximum number of rows to crop from top")
 	out                   = flag.String("out", "", "Output image name")
@@ -44,7 +44,7 @@ func main() {
 	bottom := uint(src.Bounds().Max.Y)
 	for i := bottom - *lowerCropBegin; i >= bottom-(*maxLowerResize*2); i-- {
 		r, g, b, _ := src.At(int(*lowerCropHorizOffset), int(i)).RGBA()
-		//log.Printf("x = 10, y = %d, r = %d, g = %d, b = %d", i, r, g, b)
+		//log.Printf("x = %d, y = %d, r = %d, g = %d, b = %d", int(*upperCropHorizOffset), i, r, g, b)
 		bottom = i
 		if r != uint32(*lowerCropRgb) || g != uint32(*lowerCropRgb) || b != uint32(*lowerCropRgb) {
 			break
@@ -56,6 +56,7 @@ func main() {
 	top := uint(0)
 	for i := top + *upperCropBegin; i <= (*maxUpperResize * 2); i++ {
 		r, g, b, _ := src.At(int(*upperCropHorizOffset), int(i)).RGBA()
+		//log.Printf("x = %d, y = %d, r = %d, g = %d, b = %d", int(*upperCropHorizOffset), i, r, g, b)
 		if r != uint32(*upperCropRgb) || g != uint32(*upperCropRgb) || b != uint32(*upperCropRgb) {
 			break
 		}
@@ -70,7 +71,11 @@ func main() {
 		log.Printf("Current bounds: %d, %d", src.Bounds().Max.X, src.Bounds().Max.Y)
 		log.Printf("Resize detected; clipping bottom to %d", bottom)
 		//src = imaging.Crop(src, image.Rect(0, src.Bounds().Max.X, 0, bottom))
-		src = imaging.CropAnchor(src, src.Bounds().Max.X, int(bottom), imaging.TopLeft)
+		if top != 0 {
+			src = imaging.Crop(src, image.Rectangle{Min: image.Point{src.Bounds().Min.X, int(top)}, Max: image.Point{src.Bounds().Max.X, int(bottom)}})
+		} else {
+			src = imaging.CropAnchor(src, src.Bounds().Max.X, int(bottom), imaging.TopLeft)
+		}
 	}
 
 	// Resize height to final keeping aspect ratio
